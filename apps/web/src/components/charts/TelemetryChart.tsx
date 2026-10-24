@@ -38,7 +38,7 @@ export function TelemetryChart({ data, metricType, height = 280 }: TelemetryChar
 
   if (!formattedData.length) {
     return (
-      <div className="flex items-center justify-center h-64 text-slate-500 text-xs font-mono">
+      <div className="flex items-center justify-center h-64 text-neutral-400 text-xs font-mono">
         Awaiting live telemetry stream packets...
       </div>
     );
@@ -48,22 +48,30 @@ export function TelemetryChart({ data, metricType, height = 280 }: TelemetryChar
     <div style={{ width: "100%", height }}>
       <ResponsiveContainer>
         <LineChart data={formattedData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#1E293B" opacity={0.6} />
+          <CartesianGrid strokeDasharray="3 3" stroke="#F0F0F0" vertical={false} />
           <XAxis
             dataKey="time"
-            stroke="#64748B"
-            fontSize={10}
+            stroke="#999999"
+            fontSize={11}
             tickLine={false}
+            axisLine={{ stroke: "#E5E5E5" }}
             interval="preserveStartEnd"
           />
-          <YAxis stroke="#64748B" fontSize={10} tickLine={false} domain={["auto", "auto"]} />
+          <YAxis
+            stroke="#999999"
+            fontSize={11}
+            tickLine={false}
+            axisLine={{ stroke: "#E5E5E5" }}
+            domain={["auto", "auto"]}
+          />
           <Tooltip
             contentStyle={{
-              backgroundColor: "#0B1220",
-              borderColor: "rgba(255,255,255,0.1)",
-              borderRadius: "0.75rem",
+              backgroundColor: "#FFFFFF",
+              borderColor: "#E5E5E5",
+              borderRadius: "16px",
               fontSize: "12px",
-              boxShadow: "0 8px 24px rgba(0,0,0,0.5)",
+              color: "#000000",
+              boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
             }}
           />
           <Legend wrapperStyle={{ fontSize: "11px", paddingTop: "8px" }} />
@@ -74,7 +82,7 @@ export function TelemetryChart({ data, metricType, height = 280 }: TelemetryChar
                 type="monotone"
                 dataKey="process_temp_k"
                 name="Process Temp (K)"
-                stroke="#EF4444"
+                stroke="#000000"
                 strokeWidth={2}
                 dot={false}
                 isAnimationActive={false}
@@ -83,8 +91,8 @@ export function TelemetryChart({ data, metricType, height = 280 }: TelemetryChar
                 type="monotone"
                 dataKey="air_temp_k"
                 name="Air Temp (K)"
-                stroke="#3B82F6"
-                strokeWidth={1.5}
+                stroke="#76FB91"
+                strokeWidth={2.5}
                 dot={false}
                 isAnimationActive={false}
               />
@@ -107,7 +115,7 @@ export function TelemetryChart({ data, metricType, height = 280 }: TelemetryChar
                 type="monotone"
                 dataKey="rotational_speed_rpm"
                 name="Speed (RPM)"
-                stroke="#22D3EE"
+                stroke="#000000"
                 strokeWidth={2}
                 dot={false}
                 isAnimationActive={false}
@@ -116,8 +124,8 @@ export function TelemetryChart({ data, metricType, height = 280 }: TelemetryChar
                 type="monotone"
                 dataKey="torque_nm"
                 name="Torque (Nm)"
-                stroke="#8B5CF6"
-                strokeWidth={2}
+                stroke="#76FB91"
+                strokeWidth={2.5}
                 dot={false}
                 isAnimationActive={false}
               />
@@ -130,7 +138,7 @@ export function TelemetryChart({ data, metricType, height = 280 }: TelemetryChar
                 type="monotone"
                 dataKey="vibration_mms"
                 name="Vibration (mm/s)"
-                stroke="#F43F5E"
+                stroke="#EF4444"
                 strokeWidth={2}
                 dot={false}
                 isAnimationActive={false}
@@ -139,8 +147,8 @@ export function TelemetryChart({ data, metricType, height = 280 }: TelemetryChar
                 type="monotone"
                 dataKey="pressure_bar"
                 name="Pressure (bar)"
-                stroke="#10B981"
-                strokeWidth={2}
+                stroke="#76FB91"
+                strokeWidth={2.5}
                 dot={false}
                 isAnimationActive={false}
               />

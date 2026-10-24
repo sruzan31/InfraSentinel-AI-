@@ -8,29 +8,29 @@ interface StatusBadgeProps {
 export function StatusBadge({ status, size = "md" }: StatusBadgeProps) {
   const norm = status?.toUpperCase() || "UNKNOWN";
 
-  let styles = "bg-slate-500/10 text-slate-400 border-slate-500/30";
-  let dot = "bg-slate-400";
+  let styles = "bg-[#EDEDED] text-black border border-neutral-300";
+  let dot = "bg-neutral-500";
 
-  if (norm === "OPERATIONAL" || norm === "HEALTHY" || norm === "RESOLVED") {
-    styles = "bg-emerald-500/15 text-emerald-400 border-emerald-500/30 shadow-[0_0_10px_-2px_rgba(34,197,94,0.3)]";
-    dot = "bg-emerald-400";
-  } else if (norm === "WARNING" || norm === "INVESTIGATING" || norm === "IN_PROGRESS") {
-    styles = "bg-amber-500/15 text-amber-400 border-amber-500/30 shadow-[0_0_10px_-2px_rgba(245,158,11,0.3)]";
-    dot = "bg-amber-400";
-  } else if (norm === "CRITICAL" || norm === "HIGH" || norm === "OPEN") {
-    styles = "bg-rose-500/15 text-rose-400 border-rose-500/30 shadow-[0_0_10px_-2px_rgba(239,68,68,0.35)] animate-pulse";
-    dot = "bg-rose-400";
+  if (norm === "OPERATIONAL" || norm === "HEALTHY" || norm === "RESOLVED" || norm === "NORMAL") {
+    styles = "bg-[#DFFFE6] text-black border border-[#76FB91]/40";
+    dot = "bg-[#76FB91]";
+  } else if (norm === "WARNING" || norm === "INVESTIGATING" || norm === "IN_PROGRESS" || norm === "MEDIUM") {
+    styles = "bg-amber-50 text-amber-800 border border-amber-200";
+    dot = "bg-amber-500";
+  } else if (norm === "CRITICAL" || norm === "HIGH" || norm === "OPEN" || norm === "FLAGGED") {
+    styles = "bg-rose-50 text-rose-800 border border-rose-200";
+    dot = "bg-rose-500";
   } else if (norm === "MAINTENANCE") {
-    styles = "bg-purple-500/15 text-purple-400 border-purple-500/30";
-    dot = "bg-purple-400";
+    styles = "bg-slate-100 text-slate-800 border border-slate-300";
+    dot = "bg-slate-600";
   }
 
-  const px = size === "sm" ? "px-2 py-0.5 text-[10px]" : "px-2.5 py-1 text-xs";
+  const px = size === "sm" ? "px-2.5 py-0.5 text-[11px]" : "px-3 py-1 text-xs";
 
   return (
-    <span className={`inline-flex items-center gap-1.5 rounded-full font-mono font-medium border ${px} ${styles}`}>
-      <span className={`w-1.5 h-1.5 rounded-full ${dot}`} />
-      <span>{norm}</span>
+    <span className={`inline-flex items-center gap-1.5 rounded-full font-medium ${px} ${styles}`}>
+      <span className={`w-2 h-2 rounded-full ${dot}`} />
+      <span className="font-mono tracking-tight">{norm}</span>
     </span>
   );
 }

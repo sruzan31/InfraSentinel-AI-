@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Radio, Activity, Cpu, Flame, Sliders, AlertTriangle } from "lucide-react";
+import { Radio, Activity, Cpu, Sliders } from "lucide-react";
 import { Shell } from "@/components/layout/Shell";
 import { TelemetryChart } from "@/components/charts/TelemetryChart";
 import { StatusBadge } from "@/components/ui/StatusBadge";
@@ -29,7 +29,6 @@ export default function MonitoringPage() {
   const selectedEquipment =
     equipmentList.find((e) => e.id === selectedEquipmentId) || equipmentList[0];
 
-  // Merge historical readings with live streamed frames
   const displayData = telemetryStream.length > 0
     ? telemetryStream.map((f) => ({
         timestamp: f.timestamp,
@@ -55,23 +54,23 @@ export default function MonitoringPage() {
     <Shell>
       <div className="space-y-6">
         {/* Header with Asset Selector */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-black text-white flex items-center gap-2">
-              <Radio className="w-6 h-6 text-cyan-400" />
-              <span>Live Sensor Telemetry Command</span>
+            <h1 className="text-3xl font-light text-black tracking-tight flex items-center gap-2">
+              <span>Live Sensor Telemetry</span>
+              <span className="w-2 h-2 rounded-full bg-[#76FB91]" />
             </h1>
-            <p className="text-xs text-slate-400 mt-1">
-              Synchronized multi-channel telemetry streaming at 1Hz with dynamic threshold markers.
+            <p className="text-xs text-neutral-500 mt-1 font-light">
+              High-frequency multi-channel telemetry streaming at 1Hz with dynamic threshold markers.
             </p>
           </div>
 
           <div className="flex items-center gap-3">
-            <span className="text-xs text-slate-400 font-mono">Target Asset:</span>
+            <span className="text-xs text-neutral-500 font-mono">Target:</span>
             <select
               value={selectedEquipmentId}
               onChange={(e) => setSelectedEquipmentId(Number(e.target.value))}
-              className="bg-[#0B1220] border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500 font-semibold"
+              className="bg-white border border-neutral-300 rounded-full px-4 py-2 text-xs text-black focus:outline-none focus:border-black font-medium shadow-sm"
             >
               {equipmentList.map((eq) => (
                 <option key={eq.id} value={eq.id}>
@@ -84,46 +83,46 @@ export default function MonitoringPage() {
         </div>
 
         {/* Live Measurement Cards Strip */}
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
-          <div className="glass-panel p-3 rounded-xl border border-white/5 text-center">
-            <span className="text-[10px] text-slate-400 uppercase font-mono">Process Temp</span>
-            <p className="text-lg font-bold font-mono text-rose-400 mt-0.5">
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+          <div className="clean-card p-4 rounded-2xl bg-white border border-[#EBEBEB] text-center">
+            <span className="text-[10px] text-neutral-500 uppercase font-mono">Process Temp</span>
+            <p className="text-xl font-light text-black mt-1 font-mono">
               {latestFrame?.measurements.process_temp_k ?? 310.5} K
             </p>
           </div>
-          <div className="glass-panel p-3 rounded-xl border border-white/5 text-center">
-            <span className="text-[10px] text-slate-400 uppercase font-mono">Air Temp</span>
-            <p className="text-lg font-bold font-mono text-blue-400 mt-0.5">
+          <div className="clean-card p-4 rounded-2xl bg-white border border-[#EBEBEB] text-center">
+            <span className="text-[10px] text-neutral-500 uppercase font-mono">Air Temp</span>
+            <p className="text-xl font-light text-neutral-600 mt-1 font-mono">
               {latestFrame?.measurements.air_temp_k ?? 300.2} K
             </p>
           </div>
-          <div className="glass-panel p-3 rounded-xl border border-white/5 text-center">
-            <span className="text-[10px] text-slate-400 uppercase font-mono">&Delta;T Thermal</span>
-            <p className="text-lg font-bold font-mono text-amber-400 mt-0.5">
+          <div className="clean-card p-4 rounded-2xl bg-white border border-[#EBEBEB] text-center">
+            <span className="text-[10px] text-neutral-500 uppercase font-mono">&Delta;T Thermal</span>
+            <p className="text-xl font-light text-amber-600 mt-1 font-mono">
               {latestFrame?.measurements.temp_diff_k ?? 10.3} K
             </p>
           </div>
-          <div className="glass-panel p-3 rounded-xl border border-white/5 text-center">
-            <span className="text-[10px] text-slate-400 uppercase font-mono">Shaft Speed</span>
-            <p className="text-lg font-bold font-mono text-cyan-400 mt-0.5">
+          <div className="clean-card p-4 rounded-2xl bg-white border border-[#EBEBEB] text-center">
+            <span className="text-[10px] text-neutral-500 uppercase font-mono">Shaft Speed</span>
+            <p className="text-xl font-light text-black mt-1 font-mono">
               {latestFrame?.measurements.rotational_speed_rpm ?? 1538} RPM
             </p>
           </div>
-          <div className="glass-panel p-3 rounded-xl border border-white/5 text-center">
-            <span className="text-[10px] text-slate-400 uppercase font-mono">Torque</span>
-            <p className="text-lg font-bold font-mono text-purple-400 mt-0.5">
+          <div className="clean-card p-4 rounded-2xl bg-white border border-[#EBEBEB] text-center">
+            <span className="text-[10px] text-neutral-500 uppercase font-mono">Torque Load</span>
+            <p className="text-xl font-light text-black mt-1 font-mono">
               {latestFrame?.measurements.torque_nm ?? 40.0} Nm
             </p>
           </div>
-          <div className="glass-panel p-3 rounded-xl border border-white/5 text-center">
-            <span className="text-[10px] text-slate-400 uppercase font-mono">Radial Vib</span>
-            <p className="text-lg font-bold font-mono text-red-400 mt-0.5">
+          <div className="clean-card p-4 rounded-2xl bg-white border border-[#EBEBEB] text-center">
+            <span className="text-[10px] text-neutral-500 uppercase font-mono">Radial Vib</span>
+            <p className="text-xl font-light text-rose-600 mt-1 font-mono">
               {latestFrame?.measurements.vibration_mms ?? 2.4} mm/s
             </p>
           </div>
-          <div className="glass-panel p-3 rounded-xl border border-white/5 text-center">
-            <span className="text-[10px] text-slate-400 uppercase font-mono">Pressure</span>
-            <p className="text-lg font-bold font-mono text-emerald-400 mt-0.5">
+          <div className="clean-card p-4 rounded-2xl bg-white border border-[#EBEBEB] text-center">
+            <span className="text-[10px] text-neutral-500 uppercase font-mono">Pressure</span>
+            <p className="text-xl font-light text-black mt-1 font-mono">
               {latestFrame?.measurements.pressure_bar ?? 4.2} bar
             </p>
           </div>
@@ -132,51 +131,51 @@ export default function MonitoringPage() {
         {/* 3 Telemetry Graphs */}
         <div className="grid grid-cols-1 gap-6">
           {/* 1. Thermal Gradient */}
-          <div className="glass-panel p-5 rounded-2xl border border-white/5">
-            <div className="flex items-center justify-between mb-2">
+          <div className="clean-card rounded-[32px] p-6 md:p-8 bg-white border border-[#EBEBEB]">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-[#F0F0F0] gap-2 mb-4">
               <div>
-                <h3 className="text-sm font-bold text-white">Thermal Dissipation Spectrum</h3>
-                <p className="text-xs text-slate-400">
-                  Process Fluid Temp vs Air Temp. Warning triggered when &Delta;T falls below 8.6 K at low RPM.
+                <h3 className="text-base font-semibold text-black">Thermal Dissipation Spectrum</h3>
+                <p className="text-xs text-neutral-500 font-light">
+                  Process Fluid Temp vs Ambient Air Temp. Warning triggered when &Delta;T &lt; 8.6 K at low RPM.
                 </p>
               </div>
-              <span className="text-[11px] font-mono text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded">
-                Threshold: &Delta;T &lt; 8.6 K
+              <span className="text-xs font-mono text-amber-700 bg-amber-50 border border-amber-200 px-3 py-1 rounded-full">
+                HDF Limit: &Delta;T &lt; 8.6 K
               </span>
             </div>
-            <TelemetryChart data={displayData} metricType="temperature" height={220} />
+            <TelemetryChart data={displayData} metricType="temperature" height={240} />
           </div>
 
-          {/* 2. Mechanical Powertrain */}
-          <div className="glass-panel p-5 rounded-2xl border border-white/5">
-            <div className="flex items-center justify-between mb-2">
+          {/* 2. Electromechanical Powertrain */}
+          <div className="clean-card rounded-[32px] p-6 md:p-8 bg-white border border-[#EBEBEB]">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-[#F0F0F0] gap-2 mb-4">
               <div>
-                <h3 className="text-sm font-bold text-white">Electromechanical Powertrain</h3>
-                <p className="text-xs text-slate-400">
-                  Rotational Speed (RPM) and Shaft Torque (Nm). Power calculated via $P = \tau \times \omega$.
+                <h3 className="text-base font-semibold text-black">Electromechanical Powertrain</h3>
+                <p className="text-xs text-neutral-500 font-light">
+                  Rotational Speed (RPM) and Shaft Torque (Nm). Nominal power: 1530 RPM &bull; 40 Nm.
                 </p>
               </div>
-              <span className="text-[11px] font-mono text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-2 py-0.5 rounded">
-                Nominal: 1530 RPM &bull; 40 Nm
+              <span className="text-xs font-mono text-black bg-[#EDEDED] border border-neutral-300 px-3 py-1 rounded-full">
+                Power: &tau; &times; &omega;
               </span>
             </div>
-            <TelemetryChart data={displayData} metricType="mechanical" height={220} />
+            <TelemetryChart data={displayData} metricType="mechanical" height={240} />
           </div>
 
           {/* 3. Dynamics: Vibration & Pressure */}
-          <div className="glass-panel p-5 rounded-2xl border border-white/5">
-            <div className="flex items-center justify-between mb-2">
+          <div className="clean-card rounded-[32px] p-6 md:p-8 bg-white border border-[#EBEBEB]">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-[#F0F0F0] gap-2 mb-4">
               <div>
-                <h3 className="text-sm font-bold text-white">Vibrational & Hydraulic Dynamics</h3>
-                <p className="text-xs text-slate-400">
+                <h3 className="text-base font-semibold text-black">Vibrational & Hydraulic Dynamics</h3>
+                <p className="text-xs text-neutral-500 font-light">
                   Casing Radial Vibration (mm/s ISO 10816 Zone D &gt; 7.0 mm/s) and Discharge Pressure (bar).
                 </p>
               </div>
-              <span className="text-[11px] font-mono text-rose-400 bg-rose-500/10 border border-rose-500/20 px-2 py-0.5 rounded">
-                ISO Danger Limit: &gt; 7.0 mm/s
+              <span className="text-xs font-mono text-rose-700 bg-rose-50 border border-rose-200 px-3 py-1 rounded-full">
+                Danger Zone: &gt; 7.0 mm/s
               </span>
             </div>
-            <TelemetryChart data={displayData} metricType="dynamics" height={220} />
+            <TelemetryChart data={displayData} metricType="dynamics" height={240} />
           </div>
         </div>
       </div>

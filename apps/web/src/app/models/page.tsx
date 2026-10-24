@@ -35,81 +35,83 @@ export default function ModelsPage() {
       <div className="space-y-6">
         {/* Header */}
         <div>
-          <h1 className="text-2xl font-black text-white flex items-center gap-2">
-            <Sparkles className="w-6 h-6 text-cyan-400" />
+          <h1 className="text-3xl font-light text-black tracking-tight flex items-center gap-3">
+            <span className="w-9 h-9 rounded-full bg-[#76FB91] flex items-center justify-center">
+              <Sparkles className="w-5 h-5 text-black" />
+            </span>
             <span>AI Model Management & Evaluation Leaderboard</span>
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-black/50 mt-1">
             Empirical validation results, model versioning, and feature importance rankings on the AI4I 2020 dataset.
           </p>
         </div>
 
         {/* Dataset Provenance Card */}
-        <div className="glass-panel p-6 rounded-2xl border border-white/5 space-y-3">
+        <div className="bg-white p-6 rounded-[28px] border border-[#CCCCCC]/60 shadow-sm space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400">
-                <Database className="w-5 h-5" />
+              <div className="p-2.5 rounded-full bg-[#EDEDED] text-black">
+                <Database className="w-5 h-5 text-black" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-white">AI4I 2020 Predictive Maintenance Dataset</h3>
-                <p className="text-xs text-slate-400">
+                <h3 className="text-base font-semibold text-black">AI4I 2020 Predictive Maintenance Dataset</h3>
+                <p className="text-xs text-black/50">
                   UCI Machine Learning Repository &bull; Donated by Stephan Matzka, HTW Berlin (CC BY 4.0)
                 </p>
               </div>
             </div>
-            <span className="text-xs font-mono px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+            <span className="text-xs font-mono font-medium px-3.5 py-1.5 rounded-full bg-[#DFFFE6] text-[#0A5C22] border border-[#76FB91]/40">
               Verified & Tested
             </span>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-2 text-xs font-mono">
-            <div className="p-3 bg-[#0B1220] rounded-xl border border-white/5">
-              <span className="text-slate-500">Total Observations</span>
-              <p className="text-base font-bold text-white mt-0.5">10,000 Records</p>
+            <div className="p-4 bg-[#F7F7F8] rounded-2xl border border-[#EBEBEB]">
+              <span className="text-black/50 text-[11px]">Total Observations</span>
+              <p className="text-xl font-light text-black mt-1">10,000</p>
             </div>
-            <div className="p-3 bg-[#0B1220] rounded-xl border border-white/5">
-              <span className="text-slate-500">Imbalance Ratio</span>
-              <p className="text-base font-bold text-white mt-0.5">3.39% Failures</p>
+            <div className="p-4 bg-[#F7F7F8] rounded-2xl border border-[#EBEBEB]">
+              <span className="text-black/50 text-[11px]">Imbalance Ratio</span>
+              <p className="text-xl font-light text-black mt-1">3.39% Failures</p>
             </div>
-            <div className="p-3 bg-[#0B1220] rounded-xl border border-white/5">
-              <span className="text-slate-500">Splits (Zero Leakage)</span>
-              <p className="text-base font-bold text-cyan-400 mt-0.5">70% / 15% / 15%</p>
+            <div className="p-4 bg-[#F7F7F8] rounded-2xl border border-[#EBEBEB]">
+              <span className="text-black/50 text-[11px]">Splits (Zero Leakage)</span>
+              <p className="text-xl font-light text-black mt-1">70 / 15 / 15</p>
             </div>
-            <div className="p-3 bg-[#0B1220] rounded-xl border border-white/5">
-              <span className="text-slate-500">Primary Benchmark Metric</span>
-              <p className="text-base font-bold text-emerald-400 mt-0.5">PR-AUC</p>
+            <div className="p-4 bg-[#F7F7F8] rounded-2xl border border-[#EBEBEB]">
+              <span className="text-black/50 text-[11px]">Primary Benchmark</span>
+              <p className="text-xl font-medium text-black mt-1">PR-AUC</p>
             </div>
           </div>
         </div>
 
         {/* Model Comparison Leaderboard Table */}
-        <div className="glass-panel rounded-2xl border border-white/5 overflow-hidden">
-          <div className="p-4 border-b border-white/5 flex items-center justify-between">
-            <h3 className="text-sm font-bold text-white flex items-center gap-2">
-              <Award className="w-4 h-4 text-amber-400" />
+        <div className="bg-white rounded-[28px] border border-[#CCCCCC]/60 shadow-sm overflow-hidden">
+          <div className="p-5 border-b border-[#EBEBEB] flex items-center justify-between">
+            <h3 className="text-sm font-semibold text-black flex items-center gap-2">
+              <Award className="w-4 h-4 text-black" />
               <span>Model Comparison Leaderboard</span>
             </h3>
-            <span className="text-[11px] font-mono text-slate-400">
+            <span className="text-[11px] font-mono text-black/50">
               Evaluated on 1,500 Holdout Test Records
             </span>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs font-mono">
-              <thead className="bg-[#0B1220] border-b border-white/5 text-slate-400 uppercase text-[10px]">
+              <thead className="bg-[#F7F7F8] border-b border-[#EBEBEB] text-black/60 uppercase text-[10px]">
                 <tr>
-                  <th className="py-3.5 px-4">Algorithm / Model</th>
-                  <th className="py-3.5 px-4">Type</th>
-                  <th className="py-3.5 px-4 text-cyan-400 font-bold">PR-AUC</th>
-                  <th className="py-3.5 px-4">ROC-AUC</th>
-                  <th className="py-3.5 px-4">Precision</th>
-                  <th className="py-3.5 px-4">Recall</th>
-                  <th className="py-3.5 px-4">F1 Score</th>
-                  <th className="py-3.5 px-4 text-right">Deployment Status</th>
+                  <th className="py-3.5 px-5">Algorithm / Model</th>
+                  <th className="py-3.5 px-5">Type</th>
+                  <th className="py-3.5 px-5 text-black font-bold">PR-AUC</th>
+                  <th className="py-3.5 px-5">ROC-AUC</th>
+                  <th className="py-3.5 px-5">Precision</th>
+                  <th className="py-3.5 px-5">Recall</th>
+                  <th className="py-3.5 px-5">F1 Score</th>
+                  <th className="py-3.5 px-5 text-right">Deployment Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5 font-mono">
+              <tbody className="divide-y divide-[#EBEBEB] font-mono">
                 {(modelData?.models || []).map((m: any, idx: number) => {
                   const isProduction = m.status.includes("PRODUCTION");
                   return (
@@ -117,37 +119,37 @@ export default function ModelsPage() {
                       key={idx}
                       className={
                         isProduction
-                          ? "bg-blue-600/10 font-bold border-l-2 border-blue-500"
-                          : "hover:bg-slate-800/30"
+                          ? "bg-[#DFFFE6]/30 font-semibold border-l-4 border-[#76FB91]"
+                          : "hover:bg-[#F7F7F8]/80 transition"
                       }
                     >
-                      <td className="py-4 px-4 text-white font-sans font-semibold">
+                      <td className="py-4 px-5 text-black font-sans font-semibold">
                         {m.name}
                       </td>
-                      <td className="py-4 px-4 text-slate-400 text-[11px] font-sans">
+                      <td className="py-4 px-5 text-black/50 text-[11px] font-sans">
                         {m.type}
                       </td>
-                      <td className="py-4 px-4 text-cyan-400 font-bold text-sm">
+                      <td className="py-4 px-5 text-black font-bold text-sm">
                         {m.pr_auc !== null ? m.pr_auc.toFixed(4) : "—"}
                       </td>
-                      <td className="py-4 px-4 text-white">
+                      <td className="py-4 px-5 text-black/70">
                         {m.roc_auc !== null ? m.roc_auc.toFixed(4) : "—"}
                       </td>
-                      <td className="py-4 px-4 text-slate-300">
+                      <td className="py-4 px-5 text-black/70">
                         {m.precision !== null ? (m.precision * 100).toFixed(1) + "%" : "—"}
                       </td>
-                      <td className="py-4 px-4 text-emerald-400 font-bold">
+                      <td className="py-4 px-5 text-black font-bold">
                         {m.recall !== null ? (m.recall * 100).toFixed(1) + "%" : "—"}
                       </td>
-                      <td className="py-4 px-4 text-slate-300">
+                      <td className="py-4 px-5 text-black/70">
                         {m.f1 !== null ? m.f1.toFixed(4) : "—"}
                       </td>
-                      <td className="py-4 px-4 text-right">
+                      <td className="py-4 px-5 text-right">
                         <span
-                          className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${
+                          className={`px-3 py-1 rounded-full text-[10px] font-bold ${
                             isProduction
-                              ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 shadow-[0_0_8px_#34d399]"
-                              : "bg-slate-800 text-slate-400"
+                              ? "bg-[#76FB91] text-black border border-black/10"
+                              : "bg-[#EDEDED] text-black/60"
                           }`}
                         >
                           {m.status}
@@ -162,13 +164,13 @@ export default function ModelsPage() {
         </div>
 
         {/* Global SHAP Feature Importance */}
-        <div className="glass-panel p-6 rounded-2xl border border-white/5 space-y-4">
+        <div className="bg-white p-6 rounded-[28px] border border-[#CCCCCC]/60 shadow-sm space-y-4">
           <div>
-            <h3 className="text-sm font-bold text-white flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-cyan-400" />
+            <h3 className="text-sm font-semibold text-black flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-black" />
               <span>Global SHAP Feature Importance Attribution</span>
             </h3>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-black/50">
               Derived from TreeExplainer on XGBoost trees. Shows the relative magnitude of physical sensors in predicting failure modes.
             </p>
           </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Cpu, Sparkles, AlertCircle, Info, ShieldCheck, ArrowRight, HelpCircle } from "lucide-react";
+import { Cpu, Sparkles, Info, ShieldCheck, ArrowRight } from "lucide-react";
 import { Shell } from "@/components/layout/Shell";
 import { RiskGauge } from "@/components/charts/RiskGauge";
 import { ShapBarChart } from "@/components/charts/ShapBarChart";
@@ -57,23 +57,23 @@ export default function PredictionsPage() {
     <Shell>
       <div className="space-y-6">
         {/* Header with Asset Selector */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-black text-white flex items-center gap-2">
-              <Cpu className="w-6 h-6 text-purple-400" />
-              <span>AI Prediction & Explainability Center</span>
+            <h1 className="text-3xl font-light text-black tracking-tight flex items-center gap-2">
+              <span>AI Prediction & Explainability</span>
+              <span className="w-2 h-2 rounded-full bg-[#76FB91]" />
             </h1>
-            <p className="text-xs text-slate-400 mt-1">
+            <p className="text-xs text-neutral-500 mt-1 font-light">
               Calibrated supervised failure risk estimation and SHAP (SHapley Additive exPlanations) attribution.
             </p>
           </div>
 
           <div className="flex items-center gap-3">
-            <span className="text-xs text-slate-400 font-mono">Select Equipment:</span>
+            <span className="text-xs text-neutral-500 font-mono">Equipment:</span>
             <select
               value={selectedEquipmentId}
               onChange={(e) => setSelectedEquipmentId(Number(e.target.value))}
-              className="bg-[#0B1220] border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500 font-semibold"
+              className="bg-white border border-neutral-300 rounded-full px-4 py-2 text-xs text-black focus:outline-none focus:border-black font-medium shadow-sm"
             >
               {equipmentList.map((eq) => (
                 <option key={eq.id} value={eq.id}>
@@ -87,12 +87,12 @@ export default function PredictionsPage() {
         {/* Prediction Headline Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Risk Gauge Card */}
-          <div className="glass-panel p-6 rounded-2xl border border-white/5 flex flex-col items-center justify-between text-center">
+          <div className="clean-card rounded-[32px] p-8 bg-white border border-[#EBEBEB] flex flex-col items-center justify-between text-center">
             <div className="w-full text-left mb-2">
-              <span className="text-[11px] font-mono text-purple-400 font-semibold uppercase tracking-wider">
+              <span className="text-[11px] font-mono text-neutral-500 uppercase tracking-wider block">
                 CALIBRATED ESTIMATION
               </span>
-              <h3 className="text-base font-bold text-white mt-0.5">Machine Failure Probability</h3>
+              <h3 className="text-xl font-light text-black mt-0.5">Machine Failure Probability</h3>
             </div>
 
             <div className="py-4">
@@ -104,40 +104,40 @@ export default function PredictionsPage() {
               />
             </div>
 
-            <div className="w-full p-3.5 rounded-xl bg-[#0B1220] border border-white/5 text-xs text-left space-y-1.5 font-mono">
-              <div className="flex justify-between text-slate-400">
-                <span>Model Pipeline:</span>
-                <span className="text-white font-semibold">Calibrated XGBoost</span>
+            <div className="w-full p-4 rounded-2xl bg-[#FAFAFA] border border-neutral-200 text-xs text-left space-y-2 font-mono">
+              <div className="flex justify-between text-neutral-500">
+                <span>Model Engine:</span>
+                <span className="text-black font-semibold">Calibrated XGBoost</span>
               </div>
-              <div className="flex justify-between text-slate-400">
+              <div className="flex justify-between text-neutral-500">
                 <span>PR-AUC Metric:</span>
-                <span className="text-cyan-400 font-bold">0.9471</span>
+                <span className="text-black font-bold">0.9471</span>
               </div>
-              <div className="flex justify-between text-slate-400">
+              <div className="flex justify-between text-neutral-500">
                 <span>Decision Threshold:</span>
-                <span className="text-white">0.44</span>
+                <span className="text-black">0.44</span>
               </div>
-              <div className="flex justify-between text-slate-400">
+              <div className="flex justify-between text-neutral-500">
                 <span>Predicted Mode:</span>
-                <span className="text-amber-400 font-bold">{currentFailureMode}</span>
+                <span className="text-black font-bold">{currentFailureMode}</span>
               </div>
             </div>
           </div>
 
-          {/* SHAP Feature Attribution Plot (Center & Right 2 cols) */}
-          <div className="lg:col-span-2 glass-panel p-6 rounded-2xl border border-white/5 flex flex-col justify-between">
+          {/* SHAP Feature Attribution Plot */}
+          <div className="lg:col-span-2 clean-card rounded-[32px] p-8 bg-white border border-[#EBEBEB] flex flex-col justify-between">
             <div>
-              <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center justify-between pb-4 border-b border-[#F0F0F0] mb-4">
                 <div>
-                  <h3 className="text-base font-bold text-white flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-cyan-400" />
-                    <span>SHAP Local Attribution Breakdown</span>
+                  <h3 className="text-base font-semibold text-black flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-black" />
+                    <span>SHAP Local Feature Attribution Breakdown</span>
                   </h3>
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-neutral-500 font-light mt-0.5">
                     Red indicates features driving risk higher; Green indicates features stabilizing the asset.
                   </p>
                 </div>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/30">
+                <span className="text-xs font-mono px-3 py-1 rounded-full bg-[#EDEDED] text-black">
                   TreeExplainer
                 </span>
               </div>
@@ -147,13 +147,13 @@ export default function PredictionsPage() {
               </div>
             </div>
 
-            {/* Natural Language Diagnostic Summary */}
-            <div className="p-4 rounded-xl bg-[#0B1220] border border-white/5 mt-4">
-              <div className="flex items-start gap-2.5">
-                <Info className="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5" />
+            {/* Prescriptive Natural Language Summary */}
+            <div className="p-4 rounded-2xl bg-[#FAFAFA] border border-neutral-200 mt-6">
+              <div className="flex items-start gap-3">
+                <Info className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="text-xs font-bold text-slate-200">AI Prescriptive Analysis</h4>
-                  <p className="text-xs text-slate-300 mt-1 leading-relaxed">{explanation}</p>
+                  <h4 className="text-xs font-bold text-black">AI Prescriptive Analysis</h4>
+                  <p className="text-xs text-neutral-700 mt-1 leading-relaxed font-light">{explanation}</p>
                 </div>
               </div>
             </div>
@@ -161,49 +161,49 @@ export default function PredictionsPage() {
         </div>
 
         {/* Prediction History Table */}
-        <div className="glass-panel rounded-2xl border border-white/5 overflow-hidden">
-          <div className="p-4 border-b border-white/5 flex items-center justify-between">
-            <h3 className="text-sm font-bold text-white">Historical Model Prediction Inferences</h3>
-            <span className="text-xs text-slate-500 font-mono">Last 20 Evaluations</span>
+        <div className="clean-card rounded-[32px] p-6 bg-white border border-[#EBEBEB] overflow-hidden">
+          <div className="pb-4 border-b border-[#F0F0F0] flex items-center justify-between mb-2">
+            <h3 className="text-base font-semibold text-black">Historical Model Inferences</h3>
+            <span className="text-xs text-neutral-500 font-mono">Last 20 Evaluations</span>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-[#0B1220] border-b border-white/5 text-slate-400 uppercase font-mono text-[10px]">
+              <thead className="border-b border-[#F0F0F0] text-neutral-400 uppercase font-mono text-[11px]">
                 <tr>
-                  <th className="py-3 px-4">Timestamp</th>
-                  <th className="py-3 px-4">Failure Probability</th>
-                  <th className="py-3 px-4">Risk Category</th>
-                  <th className="py-3 px-4">Predicted Failure Mode</th>
-                  <th className="py-3 px-4">Flagged Status</th>
-                  <th className="py-3 px-4">Top Feature Driver</th>
+                  <th className="py-3 px-4 font-normal">Timestamp</th>
+                  <th className="py-3 px-4 font-normal">Failure Probability</th>
+                  <th className="py-3 px-4 font-normal">Risk Category</th>
+                  <th className="py-3 px-4 font-normal">Predicted Mode</th>
+                  <th className="py-3 px-4 font-normal">Flagged Status</th>
+                  <th className="py-3 px-4 font-normal">Top Feature Driver</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5 font-sans">
+              <tbody className="divide-y divide-[#F0F0F0]">
                 {predictionHistory.map((p) => {
                   const topDriver = p.feature_contributions?.[0];
                   return (
-                    <tr key={p.id} className="hover:bg-slate-800/30 transition">
-                      <td className="py-3 px-4 font-mono text-slate-400">
+                    <tr key={p.id} className="hover:bg-[#FAFAFA] transition">
+                      <td className="py-3.5 px-4 font-mono text-neutral-500">
                         {new Date(p.timestamp).toLocaleTimeString()}
                       </td>
-                      <td className="py-3 px-4 font-mono font-bold text-white">
+                      <td className="py-3.5 px-4 font-mono font-bold text-black">
                         {(p.failure_risk_probability * 100).toFixed(1)}%
                       </td>
-                      <td className="py-3 px-4">
+                      <td className="py-3.5 px-4">
                         <StatusBadge status={p.risk_category} size="sm" />
                       </td>
-                      <td className="py-3 px-4 font-mono text-amber-400 font-medium">
+                      <td className="py-3.5 px-4 font-mono text-black font-medium">
                         {p.predicted_failure_mode}
                       </td>
-                      <td className="py-3 px-4">
+                      <td className="py-3.5 px-4">
                         {p.is_flagged ? (
-                          <span className="text-rose-400 font-bold font-mono">FLAGGED</span>
+                          <span className="text-rose-600 font-bold font-mono">FLAGGED</span>
                         ) : (
-                          <span className="text-emerald-400 font-mono">NORMAL</span>
+                          <span className="text-neutral-500 font-mono">NORMAL</span>
                         )}
                       </td>
-                      <td className="py-3 px-4 text-slate-300">
+                      <td className="py-3.5 px-4 text-neutral-700">
                         {topDriver ? `${topDriver.feature} (${topDriver.value})` : "Balanced"}
                       </td>
                     </tr>

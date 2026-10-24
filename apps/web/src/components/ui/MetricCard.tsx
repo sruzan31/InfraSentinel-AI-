@@ -6,7 +6,7 @@ interface MetricCardProps {
   value: string | number;
   subtitle?: string;
   icon: LucideIcon;
-  color?: "blue" | "green" | "amber" | "red" | "purple";
+  color?: "green" | "black" | "amber" | "red" | "blue";
   badge?: string;
 }
 
@@ -15,34 +15,34 @@ export function MetricCard({
   value,
   subtitle,
   icon: Icon,
-  color = "blue",
+  color = "black",
   badge,
 }: MetricCardProps) {
-  const colorMap = {
-    blue: "text-blue-400 border-blue-500/20 bg-blue-500/10",
-    green: "text-emerald-400 border-emerald-500/20 bg-emerald-500/10",
-    amber: "text-amber-400 border-amber-500/20 bg-amber-500/10",
-    red: "text-rose-400 border-rose-500/20 bg-rose-500/10",
-    purple: "text-purple-400 border-purple-500/20 bg-purple-500/10",
+  const iconColorMap = {
+    green: "bg-[#DFFFE6] text-black border border-[#76FB91]/40",
+    black: "bg-black text-white",
+    amber: "bg-amber-50 text-amber-600 border border-amber-200",
+    red: "bg-rose-50 text-rose-600 border border-rose-200",
+    blue: "bg-blue-50 text-blue-600 border border-blue-200",
   };
 
   return (
-    <div className="glass-panel rounded-2xl p-5 relative overflow-hidden transition-all duration-200 hover:-translate-y-0.5">
-      <div className="flex items-center justify-between mb-3">
-        <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">{title}</span>
-        <div className={`p-2 rounded-xl border ${colorMap[color]}`}>
+    <div className="clean-card p-6 rounded-[24px] relative overflow-hidden bg-white hover:-translate-y-0.5 transition-all">
+      <div className="flex items-center justify-between mb-4">
+        <span className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">{title}</span>
+        <div className={`w-9 h-9 rounded-full flex items-center justify-center ${iconColorMap[color]}`}>
           <Icon className="w-4 h-4" />
         </div>
       </div>
       <div className="flex items-baseline gap-2">
-        <h3 className="text-2xl font-bold font-mono tracking-tight text-white">{value}</h3>
+        <h3 className="text-3xl font-light text-black tracking-tight">{value}</h3>
         {badge && (
-          <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-white/5">
+          <span className="text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-[#EDEDED] text-black border border-neutral-300">
             {badge}
           </span>
         )}
       </div>
-      {subtitle && <p className="text-xs text-slate-400 mt-1.5">{subtitle}</p>}
+      {subtitle && <p className="text-xs text-neutral-500 mt-2">{subtitle}</p>}
     </div>
   );
 }

@@ -12,8 +12,11 @@ import {
   Cpu,
   ArrowRight,
   ShieldAlert,
-  CheckCircle,
-  Radio
+  CheckCircle2,
+  Radio,
+  Search,
+  Sparkles,
+  Calendar,
 } from "lucide-react";
 import { Shell } from "@/components/layout/Shell";
 import { MetricCard } from "@/components/ui/MetricCard";
@@ -34,6 +37,7 @@ export default function DashboardPage() {
   const [analytics, setAnalytics] = useState<any>(null);
   const [equipmentList, setEquipmentList] = useState<any[]>([]);
   const [activeAlerts, setActiveAlerts] = useState<any[]>([]);
+  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
 
   const fetchDashboardData = async () => {
@@ -68,7 +72,6 @@ export default function DashboardPage() {
     }
   };
 
-  // Active selected equipment
   const selectedEquipment =
     equipmentList.find((e) => e.id === selectedEquipmentId) || equipmentList[0];
 
@@ -95,296 +98,356 @@ export default function DashboardPage() {
       ? latestFrame.ai_prediction.predicted_failure_mode
       : "NONE";
 
+  const topDrivers =
+    latestFrame?.equipment_id === selectedEquipmentId && latestFrame.ai_prediction.top_drivers?.length
+      ? latestFrame.ai_prediction.top_drivers
+      : [];
+
+  const currentDate = new Date().toLocaleDateString("en-US", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+
   return (
     <Shell>
-      <div className="space-y-6">
-        {/* Header Title & Breadcrumb */}
+      <div className="space-y-8">
+        {/* Dashboard Top Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-black tracking-tight text-white flex items-center gap-2.5">
-              <span>Mission Command Center</span>
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+            <div className="flex items-center gap-2 text-xs font-mono text-neutral-500 mb-1">
+              <Calendar className="w-3.5 h-3.5" />
+              <span>{currentDate} &bull; CONTINUOUS TELEMETRY MONITORING</span>
+            </div>
+            <h1 className="text-3xl font-light text-black tracking-tight flex items-center gap-2">
+              <span>Overview</span>
+              <span className="w-2 h-2 rounded-full bg-[#76FB91]" />
             </h1>
-            <p className="text-xs text-slate-400 mt-1">
-              Real-time failure risk estimation, unsupervised anomaly timeline, and asset telemetry.
-            </p>
           </div>
 
           <div className="flex items-center gap-3">
             <Link
               href="/monitoring"
-              className="px-3.5 py-2 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 border border-blue-500/30 text-xs font-semibold flex items-center gap-2 transition"
+              className="btn-tertiary px-4 py-2 text-xs flex items-center gap-2"
             >
-              <Radio className="w-4 h-4 text-cyan-400" />
-              <span>Full Telemetry Feed</span>
+              <Radio className="w-3.5 h-3.5" />
+              <span>Telemetry Feed</span>
             </Link>
             <Link
               href="/incidents"
-              className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-white/10 text-xs font-semibold flex items-center gap-2 transition"
+              className="btn-primary px-4 py-2 text-xs flex items-center gap-2 shadow-sm"
             >
-              <Zap className="w-4 h-4 text-amber-400" />
-              <span>Incident Response</span>
+              <Zap className="w-3.5 h-3.5 text-[#76FB91]" />
+              <span>Incidents</span>
             </Link>
           </div>
         </div>
 
-        {/* Fleet KPI Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        {/* 4 Clean Metric Cards with Oversized Values */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           <MetricCard
-            title="Total Assets"
+            title="Total Equipment"
             value={analytics?.total_equipment ?? "4"}
-            subtitle="Rotating Machinery"
+            subtitle="Monitored Rotational Units"
             icon={Layers}
-            color="blue"
+            color="black"
           />
           <MetricCard
-            title="Operational"
+            title="Healthy Equipment"
             value={analytics?.operational_equipment ?? "3"}
-            subtitle="Nominal Regime"
-            icon={CheckCircle}
+            subtitle="Nominal Steady State"
+            icon={CheckCircle2}
             color="green"
+            badge="Healthy"
           />
           <MetricCard
             title="Elevated Risk"
             value={
               (analytics?.warning_equipment || 0) + (analytics?.critical_equipment || 0)
             }
-            subtitle="Requires Audit"
+            subtitle="Audit Scheduled"
             icon={AlertTriangle}
-            color="amber"
+            color={analytics?.critical_equipment > 0 ? "red" : "amber"}
+            badge={analytics?.critical_equipment > 0 ? "Critical" : "Warning"}
           />
           <MetricCard
-            title="Active Anomalies"
-            value={analytics?.active_anomalies ?? "0"}
-            subtitle="Isolation Forest"
-            icon={Flame}
-            color="purple"
-          />
-          <MetricCard
-            title="Critical Alerts"
-            value={analytics?.critical_alerts ?? "0"}
-            subtitle="Immediate Action"
+            title="Active Alerts"
+            value={analytics?.active_alerts ?? "0"}
+            subtitle="Rule Engine Events"
             icon={ShieldAlert}
-            color="red"
-          />
-          <MetricCard
-            title="Fleet Health Index"
-            value={`${analytics?.fleet_health_score ?? "96.5"}%`}
-            subtitle="Composite MTBF"
-            icon={TrendingUp}
-            color="green"
+            color="black"
           />
         </div>
 
-        {/* Main Grid: Telemetry Stream + Risk Gauge */}
+        {/* Main Grid: Monitoring Panel + AI Insights Panel */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Real-time Telemetry Mini-Center (Left 2 cols) */}
-          <div className="lg:col-span-2 glass-panel p-6 rounded-2xl border border-white/5 space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                  <span>Live Telemetry Stream: {selectedEquipment?.name || "Equipment"}</span>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-500/20 text-blue-400 border border-blue-500/30">
-                    {selectedEquipment?.code}
-                  </span>
-                </h3>
-                <p className="text-xs text-slate-400 mt-0.5">
-                  Process vs Ambient Temperature Gradient (&Delta;T) and Sensor Deviations
-                </p>
+          {/* Main Monitoring Panel (2 columns) */}
+          <div className="lg:col-span-2 clean-card rounded-[32px] p-6 md:p-8 bg-white border border-[#EBEBEB] flex flex-col justify-between">
+            <div>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-[#F0F0F0] gap-4 mb-4">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-[#76FB91] animate-pulse" />
+                    <h3 className="text-base font-semibold text-black">
+                      Live Telemetry: {selectedEquipment?.name}
+                    </h3>
+                  </div>
+                  <p className="text-xs text-neutral-500 mt-0.5">
+                    Process & Ambient Fluid Temperature Gradient (&Delta;T) and Sensor Deviations
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <select
+                    value={selectedEquipmentId}
+                    onChange={(e) => setSelectedEquipmentId(Number(e.target.value))}
+                    className="bg-[#EDEDED] border border-neutral-300 rounded-full px-3 py-1 text-xs text-black focus:outline-none font-medium"
+                  >
+                    {equipmentList.map((eq) => (
+                      <option key={eq.id} value={eq.id}>
+                        {eq.code}
+                      </option>
+                    ))}
+                  </select>
+                  <StatusBadge status={selectedEquipment?.status || "OPERATIONAL"} size="sm" />
+                </div>
               </div>
-              <StatusBadge status={selectedEquipment?.status || "OPERATIONAL"} size="sm" />
+
+              <TelemetryChart
+                data={telemetryStream.length ? telemetryStream.map((f) => ({
+                  timestamp: f.timestamp,
+                  air_temp_k: f.measurements.air_temp_k,
+                  process_temp_k: f.measurements.process_temp_k,
+                  temp_diff_k: f.measurements.temp_diff_k,
+                })) : []}
+                metricType="temperature"
+                height={260}
+              />
             </div>
 
-            <TelemetryChart
-              data={telemetryStream.length ? telemetryStream.map((f) => ({
-                timestamp: f.timestamp,
-                air_temp_k: f.measurements.air_temp_k,
-                process_temp_k: f.measurements.process_temp_k,
-                temp_diff_k: f.measurements.temp_diff_k,
-              })) : []}
-              metricType="temperature"
-              height={260}
-            />
-
-            <div className="grid grid-cols-4 gap-2 pt-2 border-t border-white/5 text-center">
-              <div className="bg-[#0B1220] p-2 rounded-xl border border-white/5">
-                <span className="text-[10px] text-slate-400 font-mono">Process Temp</span>
-                <p className="text-sm font-bold font-mono text-rose-400">
+            {/* Bottom 4 live measurements strip */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 border-t border-[#F0F0F0] text-center mt-4">
+              <div className="p-3 bg-[#F9F9F9] rounded-2xl border border-neutral-200">
+                <span className="text-[10px] text-neutral-500 uppercase font-mono">Process Temp</span>
+                <p className="text-sm font-semibold text-black mt-0.5 font-mono">
                   {latestFrame?.measurements.process_temp_k ?? 310.5} K
                 </p>
               </div>
-              <div className="bg-[#0B1220] p-2 rounded-xl border border-white/5">
-                <span className="text-[10px] text-slate-400 font-mono">Rotational Speed</span>
-                <p className="text-sm font-bold font-mono text-cyan-400">
+              <div className="p-3 bg-[#F9F9F9] rounded-2xl border border-neutral-200">
+                <span className="text-[10px] text-neutral-500 uppercase font-mono">Shaft Speed</span>
+                <p className="text-sm font-semibold text-black mt-0.5 font-mono">
                   {latestFrame?.measurements.rotational_speed_rpm ?? 1530} RPM
                 </p>
               </div>
-              <div className="bg-[#0B1220] p-2 rounded-xl border border-white/5">
-                <span className="text-[10px] text-slate-400 font-mono">Shaft Torque</span>
-                <p className="text-sm font-bold font-mono text-purple-400">
+              <div className="p-3 bg-[#F9F9F9] rounded-2xl border border-neutral-200">
+                <span className="text-[10px] text-neutral-500 uppercase font-mono">Torque Load</span>
+                <p className="text-sm font-semibold text-black mt-0.5 font-mono">
                   {latestFrame?.measurements.torque_nm ?? 40.2} Nm
                 </p>
               </div>
-              <div className="bg-[#0B1220] p-2 rounded-xl border border-white/5">
-                <span className="text-[10px] text-slate-400 font-mono">Vibration</span>
-                <p className="text-sm font-bold font-mono text-amber-400">
+              <div className="p-3 bg-[#F9F9F9] rounded-2xl border border-neutral-200">
+                <span className="text-[10px] text-neutral-500 uppercase font-mono">Vibration</span>
+                <p className="text-sm font-semibold text-black mt-0.5 font-mono">
                   {latestFrame?.measurements.vibration_mms ?? 2.4} mm/s
                 </p>
               </div>
             </div>
           </div>
 
-          {/* AI Failure Risk Gauge (Right 1 col) */}
-          <div className="glass-panel p-6 rounded-2xl border border-white/5 flex flex-col items-center justify-between text-center">
-            <div className="w-full text-left mb-2">
-              <span className="text-xs font-mono font-semibold text-blue-400 uppercase tracking-wider">
-                AI PREDICTIVE RISK
-              </span>
-              <h3 className="text-base font-bold text-white mt-0.5">
-                Calibrated Failure Probability
-              </h3>
-            </div>
+          {/* AI Insights Panel (1 column) with soft green accent */}
+          <div className="clean-card rounded-[32px] p-6 md:p-8 bg-white border border-[#EBEBEB] flex flex-col justify-between relative overflow-hidden">
+            {/* Top green glow */}
+            <div className="absolute top-0 right-0 w-48 h-48 green-subtle-glow rounded-full pointer-events-none -z-0" />
 
-            <div className="py-4">
-              <RiskGauge
-                probability={currentRiskProb}
-                category={currentRiskCategory}
-                mode={currentFailureMode}
-                size={190}
-              />
-            </div>
-
-            <div className="w-full p-3 rounded-xl bg-[#0B1220] border border-white/5 text-left text-xs space-y-1.5">
-              <div className="flex justify-between text-slate-400">
-                <span>Model Engine:</span>
-                <span className="text-white font-mono font-semibold">Calibrated XGBoost</span>
-              </div>
-              <div className="flex justify-between text-slate-400">
-                <span>Health Score:</span>
-                <span className="text-emerald-400 font-mono font-bold">
-                  {selectedEquipment?.health_score?.toFixed(1) ?? "98.5"}%
+            <div className="relative z-10">
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-xs font-mono font-semibold uppercase tracking-wider text-neutral-500">
+                  AI PREDICTIVE RISK
+                </span>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#DFFFE6] text-black font-bold">
+                  v1.0.0
                 </span>
               </div>
-              <div className="flex justify-between text-slate-400">
-                <span>Active Scenario:</span>
-                <span className="text-amber-400 font-mono uppercase">
-                  {latestFrame?.ai_prediction?.predicted_failure_mode !== "NONE"
-                    ? latestFrame?.ai_prediction?.predicted_failure_mode
-                    : "Steady State"}
+
+              <h3 className="text-xl font-light text-black mb-1">Failure Probability</h3>
+              <p className="text-xs text-neutral-500 mb-6 font-light">
+                Calibrated XGBoost supervised estimation on {selectedEquipment?.code}.
+              </p>
+
+              <div className="flex justify-center py-2">
+                <RiskGauge
+                  probability={currentRiskProb}
+                  category={currentRiskCategory}
+                  mode={currentFailureMode}
+                  size={190}
+                />
+              </div>
+
+              {/* Contributing Features / Factors */}
+              <div className="mt-6 space-y-2">
+                <span className="text-[11px] font-medium text-black block mb-2">
+                  Top Contributing Physical Drivers:
                 </span>
+                {topDrivers.length === 0 ? (
+                  <p className="text-xs text-neutral-500 font-light bg-[#F9F9F9] p-3 rounded-2xl border border-neutral-200">
+                    Operating within nominal envelope. Zero risk-elevating deviations.
+                  </p>
+                ) : (
+                  topDrivers.map((d: any, idx: number) => (
+                    <div
+                      key={idx}
+                      className="p-2.5 bg-[#F9F9F9] rounded-xl border border-neutral-200 flex items-center justify-between text-xs"
+                    >
+                      <span className="font-medium text-black">{d.feature}</span>
+                      <span className="font-mono text-[11px] text-neutral-600">
+                        {d.value} (base {d.baseline})
+                      </span>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
 
             <Link
               href="/predictions"
-              className="w-full mt-4 py-2.5 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 border border-blue-500/30 text-xs font-semibold flex items-center justify-center gap-1.5 transition"
+              className="btn-primary mt-6 w-full py-3 text-xs flex items-center justify-center gap-2 shadow-sm"
             >
-              <span>Inspect SHAP Attribution</span>
+              <span>Explore SHAP Attribution</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
         </div>
 
-        {/* Equipment Asset Matrix */}
-        <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <h3 className="text-base font-bold text-white flex items-center gap-2">
-              <Layers className="w-4 h-4 text-blue-400" />
-              <span>Monitored Critical Asset Fleet</span>
-            </h3>
-            <Link href="/equipment" className="text-xs text-blue-400 hover:underline">
-              View Asset Catalog &rarr;
+        {/* Equipment Matrix Table */}
+        <div className="clean-card rounded-[32px] p-6 md:p-8 bg-white border border-[#EBEBEB] space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h3 className="text-xl font-light text-black">Monitored Equipment Fleet</h3>
+              <p className="text-xs text-neutral-500 font-light mt-0.5">
+                Real-time operational status, location, and composite health indices.
+              </p>
+            </div>
+
+            <Link
+              href="/equipment"
+              className="btn-tertiary px-4 py-2 text-xs flex items-center gap-1.5 self-start sm:self-auto"
+            >
+              <span>View All Equipment</span>
+              <ArrowRight className="w-3 h-3" />
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {equipmentList.map((eq) => {
-              const isSelected = eq.id === selectedEquipmentId;
-              return (
-                <div
-                  key={eq.id}
-                  onClick={() => setSelectedEquipmentId(eq.id)}
-                  className={`glass-panel p-5 rounded-2xl cursor-pointer transition-all duration-150 ${
-                    isSelected
-                      ? "border-blue-500 bg-blue-500/10 shadow-glow"
-                      : "border-white/5 hover:border-white/20"
-                  }`}
-                >
-                  <div className="flex items-start justify-between mb-3">
-                    <div>
-                      <span className="text-xs font-mono font-bold text-blue-400">{eq.code}</span>
-                      <h4 className="text-sm font-bold text-white mt-0.5">{eq.name}</h4>
-                    </div>
-                    <StatusBadge status={eq.status} size="sm" />
-                  </div>
-
-                  <p className="text-[11px] text-slate-400 truncate mb-4">{eq.location}</p>
-
-                  <div className="flex items-center justify-between pt-3 border-t border-white/5 text-xs font-mono">
-                    <span className="text-slate-400">Health Index</span>
-                    <span
-                      className={`font-bold ${
-                        eq.health_score > 90
-                          ? "text-emerald-400"
-                          : eq.health_score > 70
-                          ? "text-amber-400"
-                          : "text-rose-400"
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs">
+              <thead className="border-b border-[#F0F0F0] text-neutral-400 uppercase font-mono text-[11px]">
+                <tr>
+                  <th className="py-3 px-4 font-normal">Asset Code</th>
+                  <th className="py-3 px-4 font-normal">Equipment Name</th>
+                  <th className="py-3 px-4 font-normal">Variant</th>
+                  <th className="py-3 px-4 font-normal">Location</th>
+                  <th className="py-3 px-4 font-normal">Operating Status</th>
+                  <th className="py-3 px-4 font-normal">Health Index</th>
+                  <th className="py-3 px-4 font-normal text-right">Selection</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[#F0F0F0]">
+                {equipmentList.map((eq) => {
+                  const isSelected = eq.id === selectedEquipmentId;
+                  return (
+                    <tr
+                      key={eq.id}
+                      onClick={() => setSelectedEquipmentId(eq.id)}
+                      className={`cursor-pointer transition ${
+                        isSelected ? "bg-[#DFFFE6]/40" : "hover:bg-[#FAFAFA]"
                       }`}
                     >
-                      {eq.health_score?.toFixed(1)}%
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
+                      <td className="py-4 px-4 font-mono font-bold text-black">{eq.code}</td>
+                      <td className="py-4 px-4 font-medium text-black">{eq.name}</td>
+                      <td className="py-4 px-4 text-neutral-500 font-mono uppercase">
+                        {eq.equipment_type} ({eq.quality_type})
+                      </td>
+                      <td className="py-4 px-4 text-neutral-600">{eq.location}</td>
+                      <td className="py-4 px-4">
+                        <StatusBadge status={eq.status} size="sm" />
+                      </td>
+                      <td className="py-4 px-4 font-mono font-bold text-black">
+                        {eq.health_score?.toFixed(1)}%
+                      </td>
+                      <td className="py-4 px-4 text-right">
+                        <span
+                          className={`text-xs px-3 py-1 rounded-full font-medium ${
+                            isSelected
+                              ? "bg-black text-white"
+                              : "bg-[#EDEDED] text-black hover:bg-neutral-300"
+                          }`}
+                        >
+                          {isSelected ? "Active" : "Select"}
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
         </div>
 
         {/* Active Alerts Triage Feed */}
-        <div className="glass-panel p-6 rounded-2xl border border-white/5">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-base font-bold text-white flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 text-amber-400" />
-              <span>Real-Time Alert Triage Feed</span>
-            </h3>
-            <Link href="/alerts" className="text-xs text-blue-400 hover:underline">
-              View All Alerts &rarr;
+        <div className="clean-card rounded-[32px] p-6 md:p-8 bg-white border border-[#EBEBEB]">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h3 className="text-xl font-light text-black flex items-center gap-2">
+                <span>Active Alert Triage Feed</span>
+                <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#EDEDED] text-black font-mono font-bold">
+                  {activeAlerts.length} Active
+                </span>
+              </h3>
+              <p className="text-xs text-neutral-500 font-light mt-0.5">
+                Prioritized rule engine warnings requiring operator acknowledgment.
+              </p>
+            </div>
+            <Link href="/alerts" className="text-xs text-black font-medium hover:underline">
+              All Alerts &rarr;
             </Link>
           </div>
 
           {activeAlerts.length === 0 ? (
-            <div className="p-8 text-center text-slate-500 text-xs font-mono">
-              Zero active alerts. All critical monitored equipment operating within nominal parameters.
+            <div className="py-8 text-center text-neutral-400 text-xs font-mono">
+              Zero active alerts. All monitored assets operating within normal physical parameters.
             </div>
           ) : (
-            <div className="divide-y divide-white/5">
+            <div className="divide-y divide-[#F0F0F0]">
               {activeAlerts.map((alert) => (
-                <div key={alert.id} className="py-3 flex items-center justify-between gap-4">
-                  <div className="flex items-center gap-3">
-                    <div
-                      className={`w-2.5 h-2.5 rounded-full ${
+                <div
+                  key={alert.id}
+                  className="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                >
+                  <div className="flex items-start gap-3">
+                    <span
+                      className={`w-2.5 h-2.5 rounded-full mt-1.5 flex-shrink-0 ${
                         alert.severity === "CRITICAL"
-                          ? "bg-rose-500 animate-ping"
+                          ? "bg-rose-500"
                           : alert.severity === "HIGH"
-                          ? "bg-orange-500"
-                          : "bg-amber-400"
+                          ? "bg-amber-500"
+                          : "bg-blue-500"
                       }`}
                     />
                     <div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-bold text-white">{alert.title}</span>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-sm font-semibold text-black">{alert.title}</span>
                         <StatusBadge status={alert.severity} size="sm" />
-                        <span className="text-[10px] font-mono text-slate-500">
+                        <span className="text-[10px] font-mono text-neutral-400">
                           {new Date(alert.timestamp).toLocaleTimeString()}
                         </span>
                       </div>
-                      <p className="text-xs text-slate-400 mt-0.5">{alert.message}</p>
+                      <p className="text-xs text-neutral-600 mt-1">{alert.message}</p>
                     </div>
                   </div>
 
                   <button
                     onClick={() => handleAcknowledgeAlert(alert.id)}
-                    className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium border border-white/10 transition"
+                    className="btn-tertiary px-3.5 py-1.5 text-xs self-end sm:self-center"
                   >
                     Acknowledge
                   </button>

@@ -1,19 +1,19 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Play, Pause, FastForward, Activity, ChevronDown, CheckCircle2, AlertOctagon } from "lucide-react";
+import { Play, Pause, FastForward } from "lucide-react";
 import { api } from "@/lib/api";
 import { useAppStore } from "@/lib/store";
 
 const SCENARIOS = [
-  { id: "normal", label: "Normal Baseline", color: "text-emerald-400" },
-  { id: "temp_increase", label: "Thermal Dissipation (HDF)", color: "text-rose-400" },
-  { id: "excessive_vibration", label: "Radial Vibration (>7 mm/s)", color: "text-amber-400" },
-  { id: "pressure_instability", label: "Pressure Cavitation", color: "text-cyan-400" },
-  { id: "motor_overload", label: "Motor Power Overload (PWF)", color: "text-purple-400" },
-  { id: "gradual_deterioration", label: "Impeller Tool Wear (TWF)", color: "text-orange-400" },
-  { id: "sensor_disconnection", label: "Sensor Signal Drop", color: "text-slate-400" },
-  { id: "sudden_abnormal", label: "Sudden Seizure / Stall", color: "text-red-500 font-bold" },
+  { id: "normal", label: "Normal Baseline" },
+  { id: "temp_increase", label: "Thermal Dissipation (HDF)" },
+  { id: "excessive_vibration", label: "Radial Vibration (>7 mm/s)" },
+  { id: "pressure_instability", label: "Pressure Cavitation" },
+  { id: "motor_overload", label: "Motor Power Overload (PWF)" },
+  { id: "gradual_deterioration", label: "Impeller Tool Wear (TWF)" },
+  { id: "sensor_disconnection", label: "Sensor Signal Drop" },
+  { id: "sudden_abnormal", label: "Sudden Seizure / Stall" },
 ];
 
 export function SimulatorControl() {
@@ -81,16 +81,16 @@ export function SimulatorControl() {
   };
 
   return (
-    <div className="flex items-center gap-2.5 bg-[#0F172A]/80 border border-white/10 rounded-xl px-3 py-1.5 shadow-glass-panel">
+    <div className="flex items-center gap-2 bg-[#EDEDED] border border-neutral-300 rounded-full px-3 py-1 shadow-sm">
       {/* Live Pulsing Status */}
-      <div className="flex items-center gap-2 pr-2 border-r border-white/10">
+      <div className="flex items-center gap-2 pr-2 border-r border-neutral-300">
         <span
-          className={`w-2.5 h-2.5 rounded-full ${
-            isSimulatorRunning ? "bg-emerald-400 shadow-[0_0_8px_#34d399] animate-pulse" : "bg-slate-500"
+          className={`w-2 h-2 rounded-full ${
+            isSimulatorRunning ? "bg-[#76FB91] shadow-[0_0_8px_#76FB91] animate-pulse" : "bg-neutral-400"
           }`}
         />
-        <span className="text-[11px] font-mono tracking-wider text-slate-300 font-semibold uppercase">
-          {isSimulatorRunning ? "LIVE STREAM" : "PAUSED"}
+        <span className="text-[11px] font-mono tracking-wider text-black font-semibold uppercase">
+          {isSimulatorRunning ? "LIVE" : "IDLE"}
         </span>
       </div>
 
@@ -98,11 +98,11 @@ export function SimulatorControl() {
       <select
         value={selectedEquipmentId}
         onChange={(e) => handleEquipmentChange(Number(e.target.value))}
-        className="bg-[#1E293B] border border-white/10 rounded-lg px-2.5 py-1 text-xs text-slate-200 focus:outline-none focus:border-blue-500"
+        className="bg-white border border-neutral-300 rounded-full px-2.5 py-1 text-xs text-black focus:outline-none focus:border-black font-medium"
       >
         {equipmentList.map((eq) => (
           <option key={eq.id} value={eq.id}>
-            {eq.code} — {eq.name.split(" ")[0]}
+            {eq.code}
           </option>
         ))}
       </select>
@@ -111,10 +111,10 @@ export function SimulatorControl() {
       <select
         value={simulatorScenario}
         onChange={(e) => handleScenarioChange(e.target.value)}
-        className="bg-[#1E293B] border border-white/10 rounded-lg px-2.5 py-1 text-xs text-slate-200 focus:outline-none focus:border-blue-500 font-medium"
+        className="bg-white border border-neutral-300 rounded-full px-2.5 py-1 text-xs text-black focus:outline-none focus:border-black font-medium"
       >
         {SCENARIOS.map((s) => (
-          <option key={s.id} value={s.id} className={s.color}>
+          <option key={s.id} value={s.id}>
             {s.label}
           </option>
         ))}
@@ -124,10 +124,10 @@ export function SimulatorControl() {
       <button
         onClick={toggleRun}
         disabled={loading}
-        className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition ${
+        className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold transition ${
           isSimulatorRunning
-            ? "bg-amber-500/20 text-amber-400 border border-amber-500/40 hover:bg-amber-500/30"
-            : "bg-blue-600/30 text-blue-400 border border-blue-500/40 hover:bg-blue-600/40 shadow-glow"
+            ? "bg-amber-400 text-black hover:bg-amber-500"
+            : "bg-black text-white hover:bg-neutral-800"
         }`}
       >
         {isSimulatorRunning ? (
@@ -136,7 +136,7 @@ export function SimulatorControl() {
           </>
         ) : (
           <>
-            <Play className="w-3.5 h-3.5 fill-current" /> Stream Live
+            <Play className="w-3.5 h-3.5 fill-current" /> Stream
           </>
         )}
       </button>
@@ -145,10 +145,10 @@ export function SimulatorControl() {
       <button
         onClick={handleTick}
         title="Trigger Single Sensor Measurement Tick"
-        className="px-2.5 py-1 rounded-lg text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 border border-white/10 flex items-center gap-1 transition"
+        className="px-2.5 py-1 rounded-full text-xs bg-white hover:bg-neutral-100 text-black border border-neutral-300 flex items-center gap-1 transition"
       >
-        <FastForward className="w-3.5 h-3.5 text-cyan-400" />
-        <span>Tick</span>
+        <FastForward className="w-3.5 h-3.5" />
+        <span>Step</span>
       </button>
     </div>
   );

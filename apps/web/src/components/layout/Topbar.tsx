@@ -1,6 +1,6 @@
 "use client";
 
-import { Bell, ShieldAlert, Cpu } from "lucide-react";
+import { Bell, ShieldAlert } from "lucide-react";
 import Link from "next/link";
 import { SimulatorControl } from "../simulator/SimulatorControl";
 import { useWebSocket } from "@/lib/useWebSocket";
@@ -12,25 +12,25 @@ export function Topbar() {
   const isFlagged = latestFrame?.ai_prediction?.is_flagged;
 
   return (
-    <header className="h-16 bg-[#080E1A]/80 backdrop-blur-md border-b border-white/5 fixed top-0 right-0 left-64 z-30 flex items-center justify-between px-6">
+    <header className="h-20 bg-white border-b border-[#EBEBEB] fixed top-0 right-0 left-64 z-30 flex items-center justify-between px-8">
       {/* Left: WebSocket Connection & System Heartbeat */}
       <div className="flex items-center gap-4">
-        <div className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-slate-900 border border-white/5">
+        <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-[#EDEDED] border border-neutral-300">
           <span
             className={`w-2 h-2 rounded-full ${
-              isConnected ? "bg-emerald-400 shadow-[0_0_6px_#34d399]" : "bg-rose-500 animate-pulse"
+              isConnected ? "bg-[#76FB91] shadow-[0_0_8px_#76FB91]" : "bg-rose-500 animate-pulse"
             }`}
           />
-          <span className="text-[11px] font-mono text-slate-300">
-            {isConnected ? "WS CONNECTED" : "RECONNECTING"}
+          <span className="text-[11px] font-mono font-medium text-black tracking-tight">
+            {isConnected ? "WS STREAM ACTIVE" : "DISCONNECTED"}
           </span>
         </div>
 
         {/* Global Alert Notification Pill if equipment is in risk state */}
         {isFlagged && (
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-rose-500/20 border border-rose-500/40 text-rose-300 text-[11px] font-semibold animate-pulse">
+          <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold animate-pulse">
             <ShieldAlert className="w-3.5 h-3.5" />
-            <span>CRITICAL ALERT: {latestFrame?.equipment_code} {latestFrame?.ai_prediction?.predicted_failure_mode}</span>
+            <span>CRITICAL: {latestFrame?.equipment_code} {latestFrame?.ai_prediction?.predicted_failure_mode}</span>
           </div>
         )}
       </div>
@@ -41,7 +41,7 @@ export function Topbar() {
 
         <Link
           href="/alerts"
-          className="relative p-2 text-slate-300 hover:text-white bg-slate-800/60 hover:bg-slate-700/60 rounded-xl border border-white/10 transition"
+          className="relative p-2.5 text-black hover:bg-[#EDEDED] bg-[#F4F4F4] rounded-full border border-neutral-300 transition"
           title="Active Alerts"
         >
           <Bell className="w-4 h-4" />
