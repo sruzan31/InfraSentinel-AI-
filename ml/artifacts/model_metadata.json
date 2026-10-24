@@ -1,7 +1,7 @@
 {
   "model_version": "1.0.0",
   "dataset_name": "AI4I 2020 Predictive Maintenance Dataset",
-  "trained_at": "2026-10-24T17:27:34.038053Z",
+  "trained_at": "2026-10-24T18:13:30.826215Z",
   "features": [
     "Air temperature [K]",
     "Process temperature [K]",

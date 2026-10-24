@@ -45,6 +45,12 @@ jobs:
           python ml/training/fetch_dataset.py
           python ml/training/train_models.py
 
+      - name: Initialize Database Schema & Seed Data
+        env:
+          DATABASE_URL: postgresql://infrasentinel:infrasentinel_password@localhost:5432/infrasentinel
+        run: |
+          python -c "from services.api.app.core.init_db import init_db; init_db()"
+
       - name: Run Pytest Test Suite
         env:
           DATABASE_URL: postgresql://infrasentinel:infrasentinel_password@localhost:5432/infrasentinel
@@ -63,7 +69,7 @@ jobs:
         with:
           node-version: 20
           cache: "npm"
-          cache-dependency-path: apps/web/package.json
+          cache-dependency-path: apps/web/package-lock.json
 
       - name: Install Frontend Dependencies
         working-directory: apps/web
