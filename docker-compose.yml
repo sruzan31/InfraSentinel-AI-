@@ -1,0 +1,52 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: infrasentinel_db
+    environment:
+      POSTGRES_USER: infrasentinel
+      POSTGRES_PASSWORD: infrasentinel_password
+      POSTGRES_DB: infrasentinel
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U infrasentinel -d infrasentinel"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/Dockerfile.api
+    container_name: infrasentinel_api
+    environment:
+      - DATABASE_URL=postgresql://infrasentinel:infrasentinel_password@postgres:5432/infrasentinel
+      - SECRET_KEY=infrasentinel_super_secure_jwt_secret_key_change_in_production_2026
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - ENVIRONMENT=production
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  web:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/Dockerfile.web
+    container_name: infrasentinel_web
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+      - NEXT_PUBLIC_WS_URL=ws://localhost:8000/ws
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+
+volumes:
+  pgdata:
